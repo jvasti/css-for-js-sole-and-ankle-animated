@@ -2,39 +2,76 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
-
 import { QUERIES, WEIGHTS } from '../../constants';
 
 import UnstyledButton from '../UnstyledButton';
 import Icon from '../Icon';
 import VisuallyHidden from '../VisuallyHidden';
-
 const MobileMenu = ({ isOpen, onDismiss }) => {
+  const { backdropStyles, modalStyles } = getTransitionStyles(isOpen);
   return (
-    <Overlay isOpen={isOpen} onDismiss={onDismiss}>
-      <Content aria-label="Menu">
+    <Overlay isOpen={true} onDismiss={onDismiss} style={{
+      opacity: isOpen ? 1 : 0,
+      pointerEvents: isOpen ? 'auto' : 'none',
+      ...backdropStyles
+    }}>
+      <Content aria-label="Menu" style={{
+        transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
+        ...modalStyles
+      }}>
         <CloseButton onClick={onDismiss}>
           <Icon id="close" />
           <VisuallyHidden>Dismiss menu</VisuallyHidden>
         </CloseButton>
         <Filler />
         <Nav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <NavLink style={navStyles(0, isOpen)} href="/sale">Sale</NavLink>
+          <NavLink style={navStyles(1, isOpen)} href="/new">New&nbsp;Releases</NavLink>
+          <NavLink style={navStyles(2, isOpen)} href="/men">Men</NavLink>
+          <NavLink style={navStyles(3, isOpen)} href="/women">Women</NavLink>
+          <NavLink style={navStyles(4, isOpen)} href="/kids">Kids</NavLink>
+          <NavLink style={navStyles(5, isOpen)} href="/collections">Collections</NavLink>
         </Nav>
         <Footer>
-          <SubLink href="/terms">Terms and Conditions</SubLink>
-          <SubLink href="/privacy">Privacy Policy</SubLink>
-          <SubLink href="/contact">Contact Us</SubLink>
+          <SubLink style={navStyles(6, isOpen)} href="/terms">Terms and Conditions</SubLink>
+          <SubLink style={navStyles(7, isOpen)} href="/privacy">Privacy Policy</SubLink>
+          <SubLink style={navStyles(8, isOpen)} href="/contact">Contact Us</SubLink>
         </Footer>
       </Content>
-    </Overlay>
+    </Overlay >
   );
 };
+
+function getTransitionStyles(isOpen) {
+  return {
+    backdropStyles: {
+      transition: 'opacity',
+      transitionDuration: isOpen ? '250ms' : '200ms',
+      transitionDelay: isOpen ? '0ms' : '100ms',
+    },
+    modalStyles: {
+      transition: 'transform',
+      transitionDuration: isOpen
+        ? '300ms'
+        : '250ms',
+      transitionDelay: isOpen
+        ? '50ms'
+        : '0ms',
+      transitionTimingFunction: isOpen
+        ? 'ease-out'
+        : 'ease-in',
+    },
+  };
+}
+
+const navStyles = (index, isOpen) => {
+  return {
+    opacity: isOpen ? 1 : 0,
+    transition: 'opacity, transform',
+    transitionDuration: '200ms',
+    transitionDelay: isOpen ? 350 + (index * 20) + 'ms' : '0ms',
+  }
+}
 
 const Overlay = styled(DialogOverlay)`
   position: fixed;
