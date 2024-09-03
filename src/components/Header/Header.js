@@ -20,12 +20,30 @@ const Header = () => {
           <Logo />
         </LogoWrapper>
         <DesktopNav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <NavLink href="/sale">
+            <NavText> Sale </NavText>
+            <AltNavText> Sale </AltNavText>
+          </NavLink>
+          <NavLink href="/new">
+            <NavText>New&nbsp;Releases</NavText>
+            <AltNavText>New&nbsp;Releases</AltNavText>
+          </NavLink>
+          <NavLink href="/men">
+            <NavText>Men</NavText>
+            <AltNavText>Men</AltNavText>
+          </NavLink>
+          <NavLink href="/women">
+            <NavText>Women</NavText>
+            <AltNavText>Women</AltNavText>
+          </NavLink>
+          <NavLink href="/kids">
+            <NavText>Kids</NavText>
+            <AltNavText>Kids</AltNavText>
+          </NavLink>
+          <NavLink href="/collections">
+            <NavText>Collections</NavText>
+            <AltNavText>Collections</AltNavText>
+          </NavLink>
         </DesktopNav>
         <MobileActions>
           <ShoppingBagButton>
@@ -114,15 +132,43 @@ const Filler = styled.div`
   }
 `;
 
+const NavText = styled.div`
+  will-change: transform, opacity;
+  transition: 150ms ease-in;
+`;
+
+const AltNavText = styled.div`
+  will-change: transform;
+  font-weight: ${WEIGHTS.bold};
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(75%) scaleY(0);
+  transition: 150ms ease-out;
+`;
+
 const NavLink = styled.a`
   font-size: 1.125rem;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--color-gray-900);
   font-weight: ${WEIGHTS.medium};
-
+  position: relative;
   &:first-of-type {
     color: var(--color-secondary);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover ${NavText} {
+      transform: translateY(-75%) scaleY(0);
+      transition: 150ms ease-out;
+    }
+    &:hover ${AltNavText} {
+      transform: translateY(0) scaleY(1);
+      transition: 150ms ease-in;
+    }
   }
 `;
 
